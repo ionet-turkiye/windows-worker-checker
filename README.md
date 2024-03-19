@@ -42,28 +42,34 @@ If you wish to delete the task you've created, you can use the following command
 To schedule a PowerShell script to run automatically every 10 minutes using the Windows Task Scheduler interface without using the command line, follow these steps:
 
 #Open Task Scheduler
+
 Press Windows + R to open the Run dialog, type taskschd.msc, and press Enter. This will open the Task Scheduler.
 Create a New Task
 In the Task Scheduler, navigate to the Action menu and select Create Task....
 
 #General Tab
+
 Under the General tab, give your task a meaningful name, such as "MyDockerTask". You can also provide a description.
 Choose the Run whether user is logged on or not option for the task to run regardless of the user's session. Optionally, select Run with highest privileges to ensure the task has the necessary permissions to execute.
 
 #Triggers Tab
+
 Go to the Triggers tab and click New... to set when the task should start.
 Select the Daily schedule, and then under Advanced settings, select Repeat task every: and choose 10 minutes from the dropdown. Set the duration to Indefinitely to keep the task running regularly.
 Click OK to save the trigger settings.
 
 #Actions Tab
+
 Navigate to the Actions tab and click New.... This defines what the task actually does.
 In the Action field, select Start a program. In the Program/script field, type powershell. In the Add arguments (optional) field, input -ExecutionPolicy Bypass -File "C:\path\to\your\script.ps1". Replace C:\path\to\your\script.ps1 with the actual path to your PowerShell script.
 Click OK to save the action.
 
 #Conditions and Settings Tabs
+
 (Optional) Configure any additional options under the Conditions and Settings tabs as per your requirement. For instance, under Settings, you might want to ensure the task is stopped if it runs longer than expected by selecting Stop the task if it runs longer than: and choosing an appropriate time.
 
 #Save and Test
+
 Once you've configured all settings, click OK to save the task. You might be prompted to enter your Windows credentials to authorize the task.
 To test the task, right-click on the task you just created in the Task Scheduler library and select Run. This will execute the task immediately.
 By following these steps, you've successfully scheduled your PowerShell script to run automatically every 10 minutes using Windows Task Scheduler's graphical interface. This method allows for flexible scheduling without needing to use command-line commands.
