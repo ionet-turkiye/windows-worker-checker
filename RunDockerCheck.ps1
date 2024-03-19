@@ -21,8 +21,8 @@ function Reset-Docker {
 
 
     Write-Host "IONet Docker is installing."
-    #### Change this line with 2. Copy and run the below command on docker section on your worker, otherwise it wont be worked !!
-    docker run -d -v /var/run/docker.sock:/var/run/docker.sock -e DEVICE_NAME="XXX" -e DEVICE_ID=XXX -e USER_ID=XXX -e OPERATING_SYSTEM="Windows" -e USEGPUS=true --pull always ionetcontainers/io-launch:v0.1
+    #### add your own code block below . (copy it from "2. Copy and run the below command on docker" section on your worker, otherwise it wont be worked !!
+    #### docker run -d -v /var/run/docker.sock:/var/run/docker.sock -e DEVICE_NAME="XXX" -e DEVICE_ID=XXX -e USER_ID=XXX -e OPERATING_SYSTEM="Windows" -e USEGPUS=true --pull always ionetcontainers/io-launch:v0.1
 
     # wait 10 sec for start
     Start-Sleep -Seconds 10
