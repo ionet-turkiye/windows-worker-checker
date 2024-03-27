@@ -1,75 +1,38 @@
-# windows-worker-checker
+# IONet Worker Management Script
 
-This script will check your IONet Workers for each 10 min and if not healthy it will deploy ionet workers again.
+This script offers a comprehensive solution for managing IONet Workers on Windows, focusing on ease of use and automation. It includes functionalities such as health checks, binary reinstallation, Docker cleanup, energy-saving adjustments, Rosetta 2 installation, and an AutoPilot setup for routine maintenance.
 
-Enjoy.
+## Features
 
-### Guide
+- **Health Check**: Verifies the operational status of IONet Workers.
+- **ReInstall IONet Binary**: Downloads and sets up the latest IONet Binary.
+- **ReInstall IONet Worker**: Cleans existing Docker components and reinstalls the IONet Worker.
+- **Remove ALL Deployment**: Clears all Docker components, including containers, images, volumes, and networks.
+- **Check Virtualization**: Ensures virtualization support is enabled on the system.
+- **AutoPilot Setup**: Schedules routine operations to ensure IONet Workers remain operational.
 
-1 - Add your own docker run command block to line 26, otherwise it wont be worked!
-2 - If you want to schedule it follow this steps.
+## Prerequisites
 
-### COMMAND-LINE
-# Run cmd as admin
- To do this, type "cmd" in the Start menu, right-click "Command Prompt" and select "Run as administrator."
+Before running the script, ensure that the following prerequisites are met:
 
-# Create Scheduled Task
-You can create a task with the following command. This command creates a new task that will run your specified PowerShell script (C:\path\to\your\script.ps1) every 10 minutes. Remember to modify the command with the actual location of your script.
+- PowerShell version 5.1 or later
+- Windows Subsystem for Linux (WSL) enabled
+- Docker Desktop installed and configured
+- NVIDIA drivers and CUDA toolkit (if required by your application)
 
-`schtasks /create /tn "RunDockerCheck" /tr "powershell -ExecutionPolicy Bypass -File YOUR_SCRIPT_PATH" /sc minute /mo 10 /ru SYSTEM`
+## Setting Execution Policy
 
-Components of this command:
+Before running the script, set the execution policy by running the following command in PowerShell:
 
-/create: Creates a new task.
-/tn "MyDockerTask": The name of the task is set to MyDockerTask.
-/tr: The task to run. Here, it directly calls a PowerShell script.
-/sc minute /mo 10: Schedules the task to run every 10 minutes.
-/ru SYSTEM: Runs the task as the SYSTEM user, which ensures it runs with elevated privileges.
-Checkin
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 
-# Check Scheduled Task
-If you wish to check the task you've created, you can use the following command:
+## Usage
 
-`schtasks /query | findstr "RunDockerCheck"`
+1. **Health Check**: Perform a health check of the IONet Workers.
+2. **ReInstall IONet Binary**: Update the IONet Binary to the latest version.
+3. **ReInstall IONet Worker**: Clean Docker components and reinstall the IONet Worker.
+4. **Remove ALL Deployment**: Clean all Docker resources related to IONet.
+5. **Check Virtualization**: Ensure virtualization support is enabled on the system.
+6. **AutoPilot Setup**: Schedule routine operations for automated maintenance.
 
-# Delete Scheduled Task
-If you wish to delete the task you've created, you can use the following command:
-
-`schtasks /delete /tn "RunDockerCheck" /f`
-
-### TASK SCHEDULER
-
-To schedule a PowerShell script to run automatically every 10 minutes using the Windows Task Scheduler interface without using the command line, follow these steps:
-
-#Open Task Scheduler
-
-Press Windows + R to open the Run dialog, type taskschd.msc, and press Enter. This will open the Task Scheduler.
-Create a New Task
-In the Task Scheduler, navigate to the Action menu and select Create Task....
-
-#General Tab
-
-Under the General tab, give your task a meaningful name, such as "MyDockerTask". You can also provide a description.
-Choose the Run whether user is logged on or not option for the task to run regardless of the user's session. Optionally, select Run with highest privileges to ensure the task has the necessary permissions to execute.
-
-#Triggers Tab
-
-Go to the Triggers tab and click New... to set when the task should start.
-Select the Daily schedule, and then under Advanced settings, select Repeat task every: and choose 10 minutes from the dropdown. Set the duration to Indefinitely to keep the task running regularly.
-Click OK to save the trigger settings.
-
-#Actions Tab
-
-Navigate to the Actions tab and click New.... This defines what the task actually does.
-In the Action field, select Start a program. In the Program/script field, type powershell. In the Add arguments (optional) field, input -ExecutionPolicy Bypass -File "C:\path\to\your\script.ps1". Replace C:\path\to\your\script.ps1 with the actual path to your PowerShell script.
-Click OK to save the action.
-
-#Conditions and Settings Tabs
-
-(Optional) Configure any additional options under the Conditions and Settings tabs as per your requirement. For instance, under Settings, you might want to ensure the task is stopped if it runs longer than expected by selecting Stop the task if it runs longer than: and choosing an appropriate time.
-
-#Save and Test
-
-Once you've configured all settings, click OK to save the task. You might be prompted to enter your Windows credentials to authorize the task.
-To test the task, right-click on the task you just created in the Task Scheduler library and select Run. This will execute the task immediately.
-By following these steps, you've successfully scheduled your PowerShell script to run automatically every 10 minutes using Windows Task Scheduler's graphical interface. This method allows for flexible scheduling without needing to use command-line commands.
