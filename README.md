@@ -9,6 +9,7 @@ This script offers a comprehensive solution for managing IONet Workers on Window
 - **ReInstall IONet Worker**: Cleans existing Docker components and reinstalls the IONet Worker.
 - **Remove ALL Deployment**: Clears all Docker components, including containers, images, volumes, and networks.
 - **Check Virtualization**: Ensures virtualization support is enabled on the system.
+- **Disable Energy Saver / Screen Saver**: Adjusts Windows power settings to optimize IONet Worker performance.
 - **AutoPilot Setup**: Schedules routine operations to ensure IONet Workers remain operational.
 
 ## Prerequisites
