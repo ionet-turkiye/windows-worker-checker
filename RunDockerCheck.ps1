@@ -1,37 +1,172 @@
-function Check-Conditions {
-    $imageCount = (docker image ls | Select-String 'ionet').Count
-    $containerCount = (docker ps | Select-String 'ionet').Count
+# Function to initialize or update ionet-worker-connect.txt file
+function Initialize-IoNetWorkerConnectFile {
+    $filePath = "./ionet-worker-connect.txt"
+    
+    if (Test-Path $filePath) {
+        $useExisting = Read-Host "ionet-worker-connect.txt exists. Use it? (Y/N)"
+        if ($useExisting -match "^[yY]([eE][sS])?$") {
+            return $true
+        }
+    }
 
-    if ($imageCount -eq 3 -and $containerCount -eq 2) {
-        Write-Host "IONET Worker OK"
+    $newCommand = Read-Host "Please enter the IONet worker connect command"
+    try {
+        $newCommand | Out-File -FilePath $filePath -ErrorAction Stop
+        Write-Host "File created/updated successfully." -ForegroundColor Green
         return $true
-    } else {
+    } catch {
+        Write-Host "Failed to create/update ionet-worker-connect.txt. Error: $_" -ForegroundColor Red
         return $false
     }
 }
 
-function Reset-Docker {
-    Write-Host "IONET Workers are pausing."
-    docker ps -a | Where-Object { $_ -match "ionet" } | ForEach-Object {
-        $containerId = $_.Split(" ", [StringSplitOptions]::RemoveEmptyEntries)[0]
-        docker stop $containerId
-        docker rm $containerId
-    }
+# Function to show the main menu
+function Show-Menu {
+    param (
+        [string]$Title = 'Main Menu'
+    )
+    Clear-Host
+    Write-Host "================ $Title ================"
+    
+    Write-Host "1: Health Check"
+    Write-Host "2: Re Install IONet"
+    Write-Host "3: AutoPilot Setup"
+    Write-Host "4: More Options"
+    Write-Host "5: Quit"
 }
 
-
-    Write-Host "IONet Docker is installing."
-    #### add your own code block below . (copy it from "2. Copy and run the below command on docker" section on your worker, otherwise it wont be worked !!
-    #### docker run -d -v /var/run/docker.sock:/var/run/docker.sock -e DEVICE_NAME="XXX" -e DEVICE_ID=XXX -e USER_ID=XXX -e OPERATING_SYSTEM="Windows" -e USEGPUS=true --pull always ionetcontainers/io-launch:v0.1
-
-    # wait 10 sec for start
-    Start-Sleep -Seconds 10
+# Function to perform health check
+function Health-Check {
+    Write-Host "Performing Health Check..."
+    
+    # Perform health check logic here
 }
 
-# main loop
+# Function to remove all deployment
+function Remove-AllDeployment {
+    Write-Host "Removing all deployment..."
+    
+    # Remove all deployment logic here
+}
+
+# Function to set up AutoPilot
+function AutoPilot-Setup {
+    Write-Host "Setting up AutoPilot..."
+    
+    # AutoPilot setup logic here
+}
+
+# Function to show more options menu
+function Show-MoreOptions {
+    param (
+        [string]$Title = 'More Options'
+    )
+    Clear-Host
+    Write-Host "================ $Title ================"
+    
+    Write-Host "1: Driver Check"
+    Write-Host "2: CUDA Check"
+    Write-Host "3: Check Virtualization"
+    Write-Host "4: Return to Main Menu"
+}
+
+# Function to check NVIDIA driver
+function DriverCheck {
+    Write-Host "Checking NVIDIA driver..."
+    
+    # NVIDIA driver check logic here
+}
+
+# Function to check CUDA
+function CudaCheck {
+    Write-Host "Checking CUDA..."
+    
+    # CUDA check logic here
+}
+
+# Function to check virtualization and enable
+function Check-VirtualizationAndEnable {
+    Write-Host "Checking virtualization and enabling..."
+    
+    # Virtualization check and enable logic here
+}
+
+# Function to show AutoPilot options
+function Show-AutoPilotOptions {
+    param (
+        [string]$Title = 'AutoPilot Setup'
+    )
+    Clear-Host
+    Write-Host "================ $Title ================"
+    
+    Write-Host "1: Schedule AutoPilot (30 minutes)"
+    Write-Host "2: List AutoPilot Schedule"
+    Write-Host "3: Delete AutoPilot Schedule"
+    Write-Host "4: Back to Main Menu"
+}
+
+# Function to schedule AutoPilot
+function Schedule-AutoPilot {
+    Write-Host "Scheduling AutoPilot..."
+    
+    # AutoPilot scheduling logic here
+}
+
+# Function to list AutoPilot schedule
+function List-AutoPilotSchedule {
+    Write-Host "Listing AutoPilot Schedule..."
+    
+    # List AutoPilot schedule logic here
+}
+
+# Function to delete AutoPilot schedule
+function Delete-AutoPilotSchedule {
+    Write-Host "Deleting AutoPilot Schedule..."
+    
+    # Delete AutoPilot schedule logic here
+}
+
+# Main script loop
 do {
-    $conditionsOk = Check-Conditions
-    if (-not $conditionsOk) {
-        Reset-Docker
+    Show-Menu
+    $input = Read-Host "Please select an option"
+    switch ($input) {
+        '1' {
+            Health-Check
+        }
+        '2' {
+            Remove-AllDeployment
+        }
+        '3' {
+            AutoPilot-Setup
+        }
+        '4' {
+            Show-MoreOptions
+            $moreOption = Read-Host "Please select an option"
+            switch ($moreOption) {
+                '1' {
+                    DriverCheck
+                }
+                '2' {
+                    CudaCheck
+                }
+                '3' {
+                    Check-VirtualizationAndEnable
+                }
+                '4' {
+                    continue
+                }
+                default {
+                    Write-Host "Invalid option, please try again." -ForegroundColor Red
+                }
+            }
+        }
+        '5' {
+            Write-Host "Quitting..." -ForegroundColor Yellow
+            break
+        }
+        default {
+            Write-Host "Invalid option, please try again." -ForegroundColor Red
+        }
     }
-} while (-not $conditionsOk)
+} while ($input -ne '5')
